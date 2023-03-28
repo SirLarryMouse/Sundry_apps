@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Game</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			margin: 0;
+			background-color: #f0f0f0;
+		}
+		.sudoku-board {
+			display: grid;
+			grid-template-columns: repeat(9, 1fr);
+			grid-gap: 1px;
+			background-color: #333;
+			padding: 5px;
+			position: relative;
+		}
+		.sudoku-cell {
+			width: 40px;
+			height: 40px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: #fff;
+			font-size: 18px;
+			font-weight: bold;
+			color: #333;
+		}
+		.sudoku-board::before,
+		.sudoku-board::after {
+			content: '';
+			position: absolute;
+			background-color: #333;
+			z-index: 1;
+		}
+		.sudoku-board::before {
+			width: 3px;
+			height: calc(100%);
+			top: 0;
+			left: calc(33.333% - 1px);
+		}
+		.sudoku-board::after {
+			width: 3px;
+			height: calc(100%);
+			top: 0;
+			right: calc(33.333% - 1px);
+		}
+		.sudoku-cell:nth-child(n + 19):nth-child(-n + 27)::before,
+		.sudoku-cell:nth-child(n + 46):nth-child(-n + 54)::before {
+			content: '';
+			position: absolute;
+			background-color: #333;
+			z-index: 1;
+			width: calc(100%);
+			height: 3px;
+		}
+		.sudoku-cell:nth-child(n + 19):nth-child(-n + 27)::before {
+			top: calc(33.333% - 1px);
+			left: 0;
+		}
+		.sudoku-cell:nth-child(n + 46):nth-child(-n + 54)::before {
+			top: calc(66.667% - 1px);
+			left: 0;
+		}
+		.focused {
+			background-color: rgba(220, 235, 255, 0.9);
+		}
+		.user-entered {
+			color: #007BFF; /* Change the text color */
+			font-weight: bold; /* Make the text bold */
+		}
+
+	</style>
+</head>
+<body>
+    <div class="sudoku-board" id="sudokuBoard">
+        <!-- Sudoku cells will be generated here by JavaScript -->
+    </div>
+
+    <script>
+        // Initialize the Sudoku board
+		function initSudokuBoard() {
+			const board = document.getElementById('sudokuBoard');
+			const sudokuGrid = Array.from({ length: 9 }, () => Array(9).fill(0));
+			let solved = false;
+			const timeout = 2000; // Timeout in milliseconds
+
+			while (!solved) {
+				randomizeFirstRow(sudokuGrid); // Randomly fill the first row
+				const startTime = new Date().getTime();
+				solved = solveSudoku(sudokuGrid, 9, startTime, timeout); // Solve the Sudoku board
+
+				if (!solved) {
+					// Reset the board
+					for (let i = 1; i < 9; i++) {
+						sudokuGrid[i].fill(0);
+					}
+				}
+			}
+
+			blankOutCells(sudokuGrid, 70); // Blank out 50 cells for the puzzle
+
+			for (let i = 0; i < 81; i++) {
+				const cell = document.createElement('div');
+				cell.classList.add('sudoku-cell');
+				cell.setAttribute('data-index', i);
+				cell.textContent = sudokuGrid[Math.floor(i / 9)][i % 9] || ''; // Display the number or leave it blank
+				if (sudokuGrid[Math.floor(i / 9)][i % 9] === 0) {
+					cell.setAttribute('contenteditable', 'true');
+					cell.addEventListener('focus', handleCellFocus);
+					cell.addEventListener('blur', handleCellBlur);
+					cell.addEventListener('input', handleCellInput);
+				}
+				board.appendChild(cell);
+			}
+		}
+
+		function isSafe(board, row, col, num) {
+			for (let i = 0; i < 9; i++) {
+				if (board[row][i] === num || board[i][col] === num) {
+					return false;
+				}
+			}
+
+			const startRow = row - row % 3;
+			const startCol = col - col % 3;
+			for (let i = 0; i < 3; i++) {
+				for (let j = 0; j < 3; j++) {
+					if (board[i + startRow][j + startCol] === num) {
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+		
+		function solveSudoku(board, n, startTime, timeout) {
+			let emptyCells = [];
+			for (let i = 0; i < n; i++) {
+				for (let j = 0; j < n; j++) {
+					if (board[i][j] === 0) {
+						emptyCells.push([i, j]);
+					}
+				}
+			}
+
+			if (emptyCells.length === 0) {
+				return true;
+			}
+
+			// Shuffle the empty cells array to fill them in a random order
+			emptyCells.sort(() => Math.random() - 0.5);
+
+			return solveSudokuHelper(board, n, emptyCells, 0, startTime, timeout);
+		}
+
+		function solveSudokuHelper(board, n, emptyCells, index, startTime, timeout) {
+			if (index === emptyCells.length) {
+				return true;
+			}
+
+			const elapsedTime = new Date().getTime() - startTime;
+			if (elapsedTime > timeout) {
+				return false;
+			}
+
+			const [row, col] = emptyCells[index];
+
+			for (let num = 1; num <= n; num++) {
+				if (isSafe(board, row, col, num)) {
+					board[row][col] = num;
+					if (solveSudokuHelper(board, n, emptyCells, index + 1, startTime, timeout)) {
+						return true;
+					} else {
+						board[row][col] = 0;
+					}
+				}
+			}
+			return false;
+		}
+
+		function randomizeFirstRow(board) {
+			const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+			nums.sort(() => Math.random() - 0.1);
+			
+			for (let col = 0; col < 9; col++) {
+				board[0][col] = nums[col];
+			}
+		}
+
+		
+		function blankOutCells(board, numCells) {
+			let count = 0;
+			let loopLimit = numCells * 10; // Adjust the multiplier as needed
+			let attempts = 0;
+
+			while (count < numCells && attempts < loopLimit) {
+				const row = Math.floor(Math.random() * 9);
+				const col = Math.floor(Math.random() * 9);
+
+				if (board[row][col] !== 0) {
+					const originalValue = board[row][col];
+					let legalAlternatives = 0;
+
+					for (let num = 1; num <= 9; num++) {
+						if (num !== originalValue && isSafe(board, row, col, num)) {
+							legalAlternatives++;
+						}
+					}
+
+					if (legalAlternatives === 0) {
+						board[row][col] = 0;
+						count++;
+					}
+				}
+				attempts++;
+			}
+		}
+		
+		function handleCellFocus(event) {
+			event.target.classList.add('focused');
+		}
+
+		function handleCellBlur(event) {
+			event.target.classList.remove('focused');
+		}
+
+		function handleCellInput(event) {
+			const input = event.data;
+			const num = parseInt(input, 10);
+			const cell = event.target;
+
+			if (isNaN(num) || num < 1 || num > 9) {
+				cell.textContent = '';
+				cell.classList.remove('user-entered');
+			} else {
+				cell.textContent = num;
+				cell.classList.add('user-entered');
+			}
+		}
+
+        initSudokuBoard();
+	</script>
+</body>
+</html>
