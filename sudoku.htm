@@ -105,7 +105,9 @@
 				}
 			}
 
-			blankOutCells(sudokuGrid, 70); // Blank out 50 cells for the puzzle
+			blankOutCells(sudokuGrid, 20); // Blank out 50 cells for the puzzle
+			blankOutHiddenSingles(sudokuGrid, 30); // Blank out up to 10 hidden singles
+			blankOutCells(sudokuGrid, 50); // Blank out 50 cells for the puzzle
 
 			for (let i = 0; i < 81; i++) {
 				const cell = document.createElement('div');
@@ -202,28 +204,96 @@
 			let loopLimit = numCells * 10; // Adjust the multiplier as needed
 			let attempts = 0;
 
-			while (count < numCells && attempts < loopLimit) {
-				const row = Math.floor(Math.random() * 9);
-				const col = Math.floor(Math.random() * 9);
+			const nonEmptyCells = getNonEmptyCells(board);
+			nonEmptyCells.sort(() => Math.random() - 0.5); // Shuffle the non-empty cells array
 
-				if (board[row][col] !== 0) {
-					const originalValue = board[row][col];
-					let legalAlternatives = 0;
+			while (count < numCells && attempts < loopLimit && nonEmptyCells.length > 0) {
+				const [row, col] = nonEmptyCells.pop(); // Get the next non-empty cell
 
-					for (let num = 1; num <= 9; num++) {
-						if (num !== originalValue && isSafe(board, row, col, num)) {
-							legalAlternatives++;
-						}
+				const originalValue = board[row][col];
+				let legalAlternatives = 0;
+
+				for (let num = 1; num <= 9; num++) {
+					if (num !== originalValue && isSafe(board, row, col, num)) {
+						legalAlternatives++;
+						break;
 					}
+				}
 
-					if (legalAlternatives === 0) {
+				if (legalAlternatives === 0) {
+					board[row][col] = 0;
+					count++;
+				}
+
+				attempts++;
+			}
+		}
+		
+		function blankOutHiddenSingles(board, maxCellsToRemove) {
+			let count = 0;
+
+			const nonEmptyCells = getNonEmptyCells(board);
+			nonEmptyCells.sort(() => Math.random() - 0.5); // Shuffle the non-empty cells array
+
+			while (nonEmptyCells.length > 0 && count < maxCellsToRemove) {
+				const [row, col] = nonEmptyCells.pop(); // Get the next non-empty cell
+				const originalValue = board[row][col];
+				let legalAlternatives = 0;
+
+				for (let num = 1; num <= 9; num++) {
+					if (num !== originalValue && isSafe(board, row, col, num)) {
+						legalAlternatives++;
+					}
+				}
+
+				if (legalAlternatives === 0) {
+					const isHiddenSingle = isSingleInRow(board, row, col) || isSingleInCol(board, row, col) || isSingleInBox(board, row, col);
+
+					if (isHiddenSingle) {
 						board[row][col] = 0;
 						count++;
 					}
 				}
-				attempts++;
 			}
 		}
+		
+		function isSingleInRow(board, row, col) {
+			const value = board[row][col];
+			for (let c = 0; c < 9; c++) {
+				if (c !== col && board[row][c] === 0 && isSafe(board, row, c, value)) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		function isSingleInCol(board, row, col) {
+			const value = board[row][col];
+			for (let r = 0; r < 9; r++) {
+				if (r !== row && board[r][col] === 0 && isSafe(board, r, col, value)) {
+					return false;
+				}
+			}
+			return true;
+		}		
+		
+		function isSingleInBox(board, row, col) {
+			const value = board[row][col];
+			const boxRowStart = Math.floor(row / 3) * 3;
+			const boxColStart = Math.floor(col / 3) * 3;
+
+			for (let r = 0; r < 3; r++) {
+				for (let c = 0; c < 3; c++) {
+					const newRow = boxRowStart + r;
+					const newCol = boxColStart + c;
+					if ((newRow !== row || newCol !== col) && board[newRow][newCol] === 0 && isSafe(board, newRow, newCol, value)) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
 		
 		function handleCellFocus(event) {
 			event.target.classList.add('focused');
@@ -246,6 +316,21 @@
 				cell.classList.add('user-entered');
 			}
 		}
+		
+		function getNonEmptyCells(board) {
+			const nonEmptyCells = [];
+
+			for (let row = 0; row < 9; row++) {
+				for (let col = 0; col < 9; col++) {
+					if (board[row][col] !== 0) {
+						nonEmptyCells.push([row, col]);
+					}
+				}
+			}
+
+			return nonEmptyCells;
+		}
+
 
         initSudokuBoard();
 	</script>
