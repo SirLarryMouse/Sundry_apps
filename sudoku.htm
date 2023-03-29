@@ -76,14 +76,42 @@
 			color: #007BFF; /* Change the text color */
 			font-weight: bold; /* Make the text bold */
 		}
+		.error {
+			color: red;
+		}
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.check-button {
+			background-color: #7e7f8b;
+			border: none;
+			color: white;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 10px 2px;
+			cursor: pointer;
+			padding: 8px 20px;
+			border-radius: 4px;
+		}
+
+		.check-button:hover {
+			background-color: #9d9fb2;
+		}
 
 	</style>
 </head>
 <body>
-    <div class="sudoku-board" id="sudokuBoard">
-        <!-- Sudoku cells will be generated here by JavaScript -->
+    <div class="container">
+        <div class="sudoku-board" id="sudokuBoard">
+            <!-- Sudoku cells will be generated here by JavaScript -->
+        </div>
+        <button class="check-button" id="checkButton">Check Sudoku</button>
     </div>
-
     <script>
         // Initialize the Sudoku board
 		function initSudokuBoard() {
@@ -122,7 +150,44 @@
 				}
 				board.appendChild(cell);
 			}
+			
+			const checkButton = document.getElementById('checkButton');
+			checkButton.addEventListener('click', () => checkSudoku(sudokuGrid));
 		}
+		
+		function checkSudoku(sudokuGrid) {
+			const cells = document.getElementsByClassName('sudoku-cell');
+			let hasErrors = false;
+			let isComplete = true;
+
+			for (let i = 0; i < cells.length; i++) {
+				const cell = cells[i];
+				const rowIndex = Math.floor(i / 9);
+				const colIndex = i % 9;
+				const value = parseInt(cell.textContent, 10);
+
+				if (isNaN(value)) {
+					isComplete = false;
+					continue;
+				}
+
+				if (cell.classList.contains('user-entered') && !isSafe(sudokuGrid, rowIndex, colIndex, value)) {
+					cell.style.color = 'red';
+					hasErrors = true;
+				} else {
+					cell.style.color = cell.classList.contains('user-entered') ? '#007BFF' : '#333';
+				}
+			}
+
+			if (!isComplete) {
+				alert('The Sudoku is not complete. Please fill in all cells.');
+			} else if (!hasErrors) {
+				alert('Congratulations! The Sudoku is solved correctly.');
+			} else {
+				alert('Some errors are present. Please correct them.');
+			}
+		}
+
 
 		function isSafe(board, row, col, num) {
 			for (let i = 0; i < 9; i++) {
