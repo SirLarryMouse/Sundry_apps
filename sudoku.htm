@@ -20,6 +20,7 @@
 				grid-gap: 1px;
 				background-color: #333;
 				padding: 5px;
+				z-index: 1;
 				position: relative;
 			}
 			.sudoku-cell {
@@ -139,6 +140,19 @@
 			.star:hover ~ .star {
 				color: gold;
 			}
+			.loading-overlay {
+				visibility: hidden;
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(255, 255, 255, 0.9);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 24px;
+			}
 		</style>
 	</head>
 	<body>
@@ -152,7 +166,10 @@
 					<span class="star" data-value="2">★</span>
 					<span class="star" data-value="1">★</span>
 				</div>
-			</div> 
+			</div>
+		</div>
+		<div class="loading-overlay" id="loadingOverlay">
+			<h2>Loading Sudoku...</h2>
 		</div>
 		<div class="container">
 			<div class="sudoku-board" id="sudokuBoard">
@@ -181,6 +198,7 @@
 				blankOutNakedSingles(sudokuGrid, 15); // Blank out up to 15 naked singles
 				blankOutHiddenSingles(sudokuGrid, 5 * difficulty); // Blank out up to 30 hidden singles
 				blankOutNakedSingles(sudokuGrid, 8 * difficulty); // Blank out any leftover naked singles
+				clearBoard();
 				for (let i = 0; i < 81; i++) {
 					const cell = document.createElement('div');
 					cell.classList.add('sudoku-cell');
@@ -423,9 +441,15 @@
 				if (event.target.classList.contains("star")) {
 					const difficulty = parseInt(event.target.getAttribute("data-value"), 10);
 					const popup = document.getElementById("difficultyPopup");
+					const loadingOverlay = document.getElementById("loadingOverlay");
 					popup.style.display = "none";
-					clearBoard();
-					initSudokuBoard(difficulty);
+					loadingOverlay.style.zIndex = "10";
+					loadingOverlay.style.visibility = "visible";
+					setTimeout(() => {
+						initSudokuBoard(difficulty);
+						loadingOverlay.style.zIndex = "0";
+						loadingOverlay.style.visibility = "hidden";
+					}, 100);
 				}
 			}
 			function clearBoard() {
