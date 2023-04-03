@@ -197,7 +197,7 @@
 				}
 				blankOutNakedSingles(sudokuGrid, 15); // Blank out up to 15 naked singles
 				blankOutHiddenSingles(sudokuGrid, 5 * difficulty); // Blank out up to 30 hidden singles
-				blankOutNakedSingles(sudokuGrid, 8 * difficulty); // Blank out any leftover naked singles
+				blankOutNakedSingles(sudokuGrid, 10 * difficulty); // Blank out any leftover naked singles
 				clearBoard();
 				for (let i = 0; i < 81; i++) {
 					const cell = document.createElement('div');
