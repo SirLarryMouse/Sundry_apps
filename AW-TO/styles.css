@@ -1,0 +1,225 @@
+body {
+  font-family: 'Courier New', monospace;
+  background-color: #000;
+  color: #0f0;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
+}
+
+.output-wrapper {
+  position: relative;
+  display: grid;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.output {
+  grid-area: 1 / 1;
+  padding: 20px;
+  max-height: calc(100% - 60px);
+  white-space: pre-wrap;
+  z-index: 1;
+  overflow-y: auto;
+  animation: textDistortion 1s infinite alternate;
+}
+
+.distortion {
+  grid-area: 1 / 1;
+  background-image: linear-gradient(0deg, rgba(0, 100, 0, 1) 10%, transparent 50%, transparent),
+                    linear-gradient(transparent 80%, rgba(0, 100, 0, 0.1) 20%, transparent);
+  background-size: 100px 100px, 100px 100px;
+  animation: distortion 5s linear infinite, flicker 0.15s infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.input-container {
+  display: flex;
+  height: 40px;
+  margin: 15px;
+  padding: 10px;
+  background-color: transparent;
+  border: 2px solid #0f0;
+  position: relative;
+}
+
+.input-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: 100px 100px, 100px 100px;
+  animation: innerBorderDistortion 1s infinite alternate;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.input-container::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background-size: 100px 100px, 100px 100px;
+  animation: borderDistortion 1s infinite alternate;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.input {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  line-height: 1.4;
+  flex-grow: 1;
+  background-color: #000;
+  border: none;
+  outline: none;
+  color: #0f0;
+  padding: 0 10px;
+  animation: textDistortion 1s infinite alternate;
+}
+
+.input::placeholder {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #0f0;
+}
+
+@keyframes distortion {
+  0%{
+    opacity: 0.1;
+    transform: translateX(-100%);
+  }
+  40%{
+    opacity: 0.15;
+    transform: translateX(-10%);
+  }
+  45%{
+    opacity: 0.23;
+    transform: translateX(10%);
+  }
+  50%{
+    opacity: 0.25;
+  }
+  60%{
+    opacity: 0.2;
+    transform: translateX(0%);
+  }
+  100% {
+    opacity: 0.1;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes flicker {
+  0%, 100% {
+    opacity: 0.02;
+  }
+  30% {
+    opacity: 0.1;
+  }
+  65% {
+    opacity: 0.05;
+  }
+}
+
+.output::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(rgba(0, 255, 0, 0.1) 50%, transparent 50%, transparent),
+                    linear-gradient(90deg, rgba(0, 255, 0, 0.1) 50%, transparent 50%, transparent);
+  background-size: 100px 100px, 100px 100px;
+  animation: distortion 5s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes textDistortion {
+  0% {
+    text-shadow: 0 0 1px #0f0, 0 0 2px #0f0, 0 0 3px #0f0, 0 0 4px #0f0, 0 0 5px #0f0;
+  }
+  25% {
+    text-shadow: 1px 0 1px #0f0, 1px 0 2px #0f0, 1px 0 3px #0f0, 1px 0 4px #0f0, 1px 0 5px #0f0;
+  }
+  50% {
+    text-shadow: 0 0 1px #0f0, 0 0 2px #0f0, 0 0 3px #0f0, 0 0 4px #0f0, 0 0 5px #0f0;
+  }
+  75% {
+    text-shadow: -1px 0 1px #0f0, -1px 0 2px #0f0, -1px 0 3px #0f0, -1px 0 4px #0f0, -1px 0 5px #0f0;
+  }
+  100% {
+    text-shadow: 0 0 1px #0f0, 0 0 2px #0f0, 0 0 3px #0f0, 0 0 4px #0f0, 0 0 5px #0f0;
+  }
+}
+
+@keyframes borderDistortion {
+  0% {
+    box-shadow: 0 0 1px #0f0, 0 0 2px #0f0, 0 0 3px #0f0, 0 0 4px #0f0, 0 0 5px #0f0;
+  }
+  25% {
+    box-shadow: 1px 0 1px #0f0, 1px 0 2px #0f0, 1px 0 3px #0f0, 1px 0 4px #0f0, 1px 0 5px #0f0;
+  }
+  50% {
+    box-shadow: 0 0 1px #0f0, 0 0 2px #0f0, 0 0 3px #0f0, 0 0 4px #0f0, 0 0 5px #0f0;
+  }
+  75% {
+    box-shadow: -1px 0 1px #0f0, -1px 0 2px #0f0, -1px 0 3px #0f0, -1px 0 4px #0f0, -1px 0 5px #0f0;
+  }
+  100% {
+    box-shadow: 0 0 1px #0f0, 0 0 2px #0f0, 0 0 3px #0f0, 0 0 4px #0f0, 0 0 5px #0f0;
+  }
+}
+
+@keyframes innerBorderDistortion {
+  0% {
+    box-shadow: inset 0 0 1px #0f0, inset 0 0 2px #0f0, inset 0 0 3px #0f0, inset 0 0 4px #0f0, inset 0 0 5px #0f0;
+  }
+  25% {
+    box-shadow: inset 1px 0 1px #0f0, inset 1px 0 2px #0f0, inset 1px 0 3px #0f0, inset 1px 0 4px #0f0, inset 1px 0 5px #0f0;
+  }
+  50% {
+    box-shadow: inset 0 0 1px #0f0, inset 0 0 2px #0f0, inset 0 0 3px #0f0, inset 0 0 4px #0f0, inset 0 0 5px #0f0;
+  }
+  75% {
+    box-shadow: inset -1px 0 1px #0f0, inset -1px 0 2px #0f0, inset -1px 0 3px #0f0, inset -1px 0 4px #0f0, inset -1px 0 5px #0f0;
+  }
+  100% {
+    box-shadow: inset 0 0 1px #0f0, inset 0 0 2px #0f0, inset 0 0 3px #0f0, inset 0 0 4px #0f0, inset 0 0 5px #0f0;
+  }
+}
+
+/* For Chrome, Edge, and Safari */
+.output::-webkit-scrollbar {
+  width: 8px;
+}
+
+.output::-webkit-scrollbar-track {
+  background: #000;
+}
+
+.output::-webkit-scrollbar-thumb {
+  background-color: #0f0;
+  border-radius: 4px;
+}
+
+/* For Firefox */
+.output {
+  scrollbar-width: thin;
+  scrollbar-color: #0f0 #000;
+}
