@@ -33,10 +33,10 @@ body {
 
 .distortion {
   grid-area: 1 / 1;
-  background-image: linear-gradient(0deg, rgba(0, 100, 0, 1) 10%, transparent 50%, transparent),
+  background-image: linear-gradient(10deg, rgba(0, 100, 0, 1) 10%, transparent 50%, transparent),
                     linear-gradient(transparent 80%, rgba(0, 100, 0, 0.1) 20%, transparent);
   background-size: 100px 100px, 100px 100px;
-  animation: distortion 5s linear infinite, flicker 0.15s infinite;
+  animation: distortion 3s linear infinite, flicker 0.01s infinite;
   pointer-events: none;
   z-index: 2;
 }
@@ -99,27 +99,54 @@ body {
 
 @keyframes distortion {
   0%{
-    opacity: 0.1;
-    transform: translateX(-100%);
+    opacity: 0.2;
+    transform: translateX(-50%);
   }
   40%{
-    opacity: 0.15;
-    transform: translateX(-10%);
+    opacity: 0.35;
+    transform: translateX(20%);
   }
   45%{
-    opacity: 0.23;
-    transform: translateX(10%);
+    opacity: 0.43;
+    transform: translateX(-10%);
   }
   50%{
-    opacity: 0.25;
+    opacity: 0.45;
+	transform: translateX(30%);
   }
   60%{
-    opacity: 0.2;
+    opacity: 0.3;
     transform: translateX(0%);
   }
   100% {
-    opacity: 0.1;
-    transform: translateX(100%);
+    opacity: 0.2;
+    transform: translateX(-20%);
+  }
+}
+
+@keyframes distortionOpp {
+  0%{
+    opacity: 0.2;
+    transform: translateX(50%);
+  }
+  40%{
+    opacity: 0.25;
+    transform: translateX(10%);
+  }
+  45%{
+    opacity: 0.33;
+    transform: translateX(-10%);
+  }
+  50%{
+    opacity: 0.35;
+  }
+  60%{
+    opacity: 0.3;
+    transform: translateX(0%);
+  }
+  100% {
+    opacity: 0.2;
+    transform: translateX(-50%);
   }
 }
 
@@ -142,10 +169,10 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: linear-gradient(rgba(0, 255, 0, 0.1) 50%, transparent 50%, transparent),
-                    linear-gradient(90deg, rgba(0, 255, 0, 0.1) 50%, transparent 50%, transparent);
+  background-image: linear-gradient(70deg, transparent 20%, rgba(0, 100, 0, 1) 40%, transparent),
+                    linear-gradient(rgba(0, 100, 0, 0.1) 30%, transparent 50%, transparent);
   background-size: 100px 100px, 100px 100px;
-  animation: distortion 5s linear infinite;
+  animation: distortionOpp 1s linear infinite, flicker 0.05s linear infinite;
   pointer-events: none;
   z-index: 1;
 }
