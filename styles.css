@@ -1,0 +1,84 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #000;
+    color: #fff;
+}
+
+header {
+    padding: 1rem;
+    text-align: center;
+    background-color: #333;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.games {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.game {
+    width: 300px;
+    background-color: #333;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+h2, h3 {
+    margin-bottom: 1rem;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 1rem;
+}
+
+button a {
+    color: #000;
+    text-decoration: none;
+}
+
+button:hover {
+    background-color: #666;
+    color: #fff;
+}
+
+button:hover a {
+    color: #fff;
+}
+
+footer {
+    padding:
+    1rem;
+    text-align: center;
+    background-color: #333;
+    margin-top: 2rem;
+}
+
+footer p {
+    font-size: 0.9rem;
+}
