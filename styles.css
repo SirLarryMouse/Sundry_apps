@@ -5,25 +5,43 @@
 }
 
 body {
-    font-family: 'Courier New', monospace;
-    background-color: #000;
-    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    background-color: #ffffff;
+    color: #1d1d1d;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 header {
-    padding: 1rem;
+    padding: 2rem;
     text-align: center;
-    background-color: #333;
+    background-color: #f5f5f5;
     margin-bottom: 2rem;
 }
 
 h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 .intro {
     text-align: center;
     margin-bottom: 2rem;
+    padding: 0 2rem;
+    flex-grow: 1;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
 .games {
@@ -31,51 +49,59 @@ h1 {
     justify-content: center;
     flex-wrap: wrap;
     gap: 2rem;
+    padding: 0 2rem;
+    flex-grow: 1;
 }
 
 .game {
     width: 300px;
-    background-color: #333;
+    background-color: #f0f0f0;
     padding: 1rem;
+	margin-bottom: 1rem;
     border-radius: 0.5rem;
     text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-h2, h3 {
+.game:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
     margin-bottom: 1rem;
 }
 
-button {
-    padding: 0.5rem 1rem;
-    background-color: #fff;
-    color: #000;
+.game p {
+    margin-bottom: 0.5rem;
+}
+
+.game-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #1d1d1d;
+    color: #ffffff;
     border: none;
     border-radius: 0.5rem;
     font-size: 1rem;
     cursor: pointer;
     text-decoration: none;
-    margin-top: 1rem;
+    margin-top: 0.2rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-button a {
-    color: #000;
-    text-decoration: none;
-}
-
-button:hover {
-    background-color: #666;
-    color: #fff;
-}
-
-button:hover a {
-    color: #fff;
+.game-button:hover {
+    background-color: #3a3a3a;
+    transform: translateY(-2px);
 }
 
 footer {
-    padding:
-    1rem;
+    padding: 1rem;
     text-align: center;
-    background-color: #333;
+    background-color: #f5f5f5;
     margin-top: 2rem;
 }
 
