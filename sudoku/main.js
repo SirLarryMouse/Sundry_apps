@@ -1,4 +1,14 @@
 // Initialize the Sudoku board
+document.addEventListener('DOMContentLoaded', () => {
+    const switchStyleButton = document.getElementById('switchStyleButton');
+    let currentStyle = 'styles.css';
+
+    switchStyleButton.addEventListener('click', () => {
+        currentStyle = currentStyle === 'styles.css' ? 'hStyles.css' : 'styles.css';
+        switchStyles(currentStyle);
+    });
+});
+
 function initSudokuBoard(difficulty) {
 	const board = document.getElementById('sudokuBoard');
 	const sudokuGrid = Array.from({ length: 9 }, () => Array(9).fill(0));
@@ -70,7 +80,7 @@ function checkSudoku(sudokuGrid) {
 			isComplete = false;
 			continue;
 		}
-			if (cell.classList.contains('user-entered') && !isSafe(sudokuGrid, rowIndex, colIndex, value)) {
+		if (cell.classList.contains('user-entered') && !isSafe(sudokuGrid, rowIndex, colIndex, value)) {
 			cell.style.color = 'red';
 			hasErrors = true;
 		} else {
@@ -272,6 +282,14 @@ function handleStarClick(event) {
 		}, 100);
 	}
 }
+
+
+
+function switchStyles(styleName) {
+    const link = document.querySelector('link[rel="stylesheet"]');
+    link.href = styleName;
+}
+
 function clearBoard() {
 const board = document.getElementById("sudokuBoard");
 	while (board.firstChild) {

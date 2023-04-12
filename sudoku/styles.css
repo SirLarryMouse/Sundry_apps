@@ -146,3 +146,23 @@ body {
 	align-items: center;
 	font-size: 24px;
 }
+
+.switch-style {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #7e7f8b;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.switch-style:hover {
+    background-color: #9d9fb2;
+}
